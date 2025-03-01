@@ -7,9 +7,14 @@ import newYork from '../public/images/newyork.jpg'
 import tokyo from '../public/images/tokyo.jpg'
 import paris from '../public/images/paris.jpg'
 import background from '../public/images/background.jpg'
+import Modal from "./components/Modal";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   const handleSearch = () => {
     if (search.trim() !== "") {
@@ -117,16 +122,29 @@ export default function HomePage() {
       </section>
 
 
-      {/* Call to Action */}
       <section className="mt-12 w-full text-center bg-blue-500 py-12 text-white">
         <h2 className="text-3xl font-semibold">Start Your Journey Now!</h2>
         <p className="mt-2 text-lg">Create an itinerary and explore amazing places.</p>
-        <Link href="/auth/signup">
-          <button className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition">
-            Sign Up Now
-          </button>
-        </Link>
+        <button
+          onClick={() => setIsLoginOpen(true)}
+          className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
+        >
+          Login
+        </button>
       </section>
+      {/* Login Modal */}
+      <Modal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)}>
+        <Login onSignupClick={() => {
+          setIsLoginOpen(false); // Close login modal
+          setIsSignupOpen(true); // Open signup modal
+        }} />
+      </Modal>
+
+      {/* Signup Modal */}
+      <Modal isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)}>
+        <Signup />
+      </Modal>
+      
     </main>
   );
 }
