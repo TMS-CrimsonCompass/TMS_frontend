@@ -224,7 +224,7 @@ export default function HomePage() {
 
       {/* FAQ Button Section */}
       <section className="mt-6 w-full flex justify-center">
-        <Link href="/open">
+        <Link href="/faq">
           <button className="bg-gray-700 text-white px-6 py-3 rounded-md font-semibold hover:bg-gray-900 transition">
             View FAQs
           </button>
