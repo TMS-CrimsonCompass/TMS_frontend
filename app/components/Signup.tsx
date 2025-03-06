@@ -20,20 +20,24 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-
+  
+    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+      setError("Password must be at least 8 characters long and include letters and numbers.");
+      return;
+    }
+  
     setError("");
     setIsLoading(true);
-
+  
     try {
-      // Replace with your backend API endpoint
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
-
-      const response = await fetch(`${backendUrl}/auth/register`, {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api";
+  
+      const response = await fetch(`${backendUrl}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,25 +49,27 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           password,
         }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
+        const errorMessage = data.message || "Registration failed";
+        if (data.code === "EMAIL_ALREADY_EXISTS") {
+          throw new Error("This email is already registered.");
+        }
+        throw new Error(errorMessage);
       }
-
-      // Auto-login after successful registration
+  
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-
+  
       if (result?.error) {
         setError("Registration successful, but auto-login failed. Please log in manually.");
         if (onLoginClick) onLoginClick();
       } else {
-        // Close the modal on successful signup and login
         closeAuthModal();
       }
     } catch (error: any) {
@@ -72,7 +78,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   return (
     <div className="flex flex-col md:flex-row">

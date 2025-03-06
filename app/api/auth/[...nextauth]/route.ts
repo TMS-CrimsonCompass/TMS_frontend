@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 // This would connect to your actual backend API
-const backendUrl = process.env.BACKEND_URL || "http://localhost:8000/api";
+const backendUrl = process.env.BACKEND_URL || "http://localhost:8080/api";
 
 const handler = NextAuth({
   providers: [
@@ -16,10 +16,9 @@ const handler = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password required");
         }
-
+      
         try {
-          // Make API call to your backend
-          const response = await fetch(`${backendUrl}/auth/login`, {
+          const response = await fetch(`${backendUrl}/users/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -29,19 +28,22 @@ const handler = NextAuth({
               password: credentials.password,
             }),
           });
-
+      
           const data = await response.json();
-
+      
           if (!response.ok) {
             throw new Error(data.message || "Authentication failed");
           }
-
+      
+          // Return user object with accessToken
           return {
-            id: data.user.id,
-            email: data.user.email,
-            name: `${data.user.firstName} ${data.user.lastName}`,
+            id: data.data.userId.toString(),
+            email: data.data.email,
+            name: `${data.data.firstName} ${data.data.lastName}`,
+            role: data.data.role,
+            profilePicture: data.data.profilePicture,
+            phoneNumber: data.data.phoneNumber,
             accessToken: data.accessToken,
-            // Include any other user data you need
           };
         } catch (error) {
           console.error("Auth error:", error);
@@ -52,22 +54,22 @@ const handler = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // After initial sign in
+      // Add accessToken to token after initial sign-in
       if (user) {
         token.id = user.id;
-        token.accessToken = user.accessToken;
+        token.accessToken = user.accessToken; // Add accessToken here
       }
       return token;
     },
     async session({ session, token }) {
-      // Make user data available in session
+      // Include accessToken in session
       if (token) {
         session.user.id = token.id;
-        session.user.accessToken = token.accessToken;
+        session.user.accessToken = token.accessToken; // Add accessToken here
       }
       return session;
     },
-  },
+  },  
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
