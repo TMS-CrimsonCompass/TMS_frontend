@@ -13,6 +13,10 @@ import background from '../public/images/background.jpg'
 import Modal from "./components/Modal";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import Button from './components/ui/Button';
+import Card from './components/ui/Card';
+
+
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
@@ -201,16 +205,24 @@ export default function HomePage() {
       <section className="mt-12 w-full max-w-6xl px-4">
         <h2 className="text-3xl font-bold text-black text-center">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          {[
-            { title: "Search & Explore", desc: "Find destinations and plan your trip easily." },
-            { title: "Book & Save", desc: "Book flights, hotels, and activities in one place." },
-            { title: "Itinerary Planning", desc: "Create and share your perfect travel itinerary." },
-          ].map((step, index) => (
-            <div key={index} className="bg-white shadow-lg rounded-lg p-6 text-center">
-              <h3 className="text-xl font-bold text-gray-900">{step.title}</h3>
-              <p className="mt-2 text-gray-900 font-medium">{step.desc}</p>
+          <Link href="/explore">
+            <div className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer hover:shadow-xl transition transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-900">Search & Explore</h3>
+              <p className="mt-2 text-gray-900 font-medium">Find destinations and plan your trip easily.</p>
             </div>
-          ))}
+          </Link>
+          <Link href="/book">
+            <div className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer hover:shadow-xl transition transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-900">Book & Save</h3>
+              <p className="mt-2 text-gray-900 font-medium">Book flights, hotels, and activities in one place.</p>
+            </div>
+          </Link>
+          <Link href="/itinerary">
+            <div className="bg-white shadow-lg rounded-lg p-6 text-center cursor-pointer hover:shadow-xl transition transform hover:scale-105">
+              <h3 className="text-xl font-bold text-gray-900">Itinerary Planning</h3>
+              <p className="mt-2 text-gray-900 font-medium">Create and share your perfect travel itinerary.</p>
+            </div>
+          </Link>
         </div>
       </section>
 
