@@ -60,18 +60,24 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
         throw new Error(errorMessage);
       }
   
+     
       const result = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         email,
         password,
       });
-  
-      if (result?.error) {
-        setError("Registration successful, but auto-login failed. Please log in manually.");
-        if (onLoginClick) onLoginClick();
-      } else {
-        closeAuthModal();
+
+      if (onLoginClick) {
+        onLoginClick();
       }
+  
+      // if (result?.error) {
+      //   setError("Registration successful, but auto-login failed. Please log in manually.");
+      //   if (onLoginClick) onLoginClick();
+      // } else {
+      //   closeAuthModal();
+      // }
+      
     } catch (error: any) {
       setError(error.message || "An unexpected error occurred");
       console.error("Signup error:", error);
