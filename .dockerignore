@@ -1,0 +1,27 @@
+# Exclude node modules to ensure a clean install during the Docker build
+node_modules
+**/node_modules
+
+# Exclude Next.js build output directories; the build will be created inside the container
+.next
+.next/cache
+out
+
+# Exclude local environment files for security
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Exclude log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Exclude Git metadata and related files
+.git
+.gitignore
+
+# Exclude miscellaneous OS files and directories
+.DS_Store
