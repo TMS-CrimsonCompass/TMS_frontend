@@ -20,7 +20,7 @@ import room2 from '../../public/images/room2.jpg';
 import pool2 from '../../public/images/pool2.jpg';
 import hotelLobby from '../../public/images/hotelLobby.jpg';
 import food1 from '../../public/images/food1.jpg';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+
 
 const hotelLocation = {
   lat: 36.0986,
@@ -437,21 +437,7 @@ export default function Page() {
           </ul>
         </Card>
       </div>
-      {/* Map Section */}
-      <div className="mt-12 h-96">
-        <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            center={hotelLocation}
-            zoom={15}
-          >
-            <Marker position={hotelLocation} title="Excalibur Hotel" />
-            {nearbyPlaces.map((place, index) => (
-              <Marker key={index} position={place} title={place.name} />
-            ))}
-          </GoogleMap>
-        </LoadScript>
-      </div>
+     
 
 
       {/* Room Availability Section */}

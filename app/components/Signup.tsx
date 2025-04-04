@@ -60,11 +60,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
         throw new Error(errorMessage);
       }
   
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
+      setIsLoading(false);
+      onLoginClick?.(); // Switch to login view
+
   
       if (result?.error) {
         setError("Registration successful, but auto-login failed. Please log in manually.");
