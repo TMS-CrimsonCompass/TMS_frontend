@@ -173,13 +173,16 @@ export default function Page() {
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleScrollToSection = (sectionId) => {
-    document.getElementById(sectionId).scrollIntoView({
-      behavior: 'smooth',
-    });
-  };
+  const handleScrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  };  
 
-  const handleImageClick = (image) => {
+  const handleImageClick = (image: any) => {
     setSelectedImage(image);
   };
 

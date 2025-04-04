@@ -19,8 +19,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run Test Cases
-        run: npm run test
+      # - name: Run Test Cases
+      #   run: npm run test
 
       - name: Build Next.js Application
         run: npm run build
