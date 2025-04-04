@@ -23,7 +23,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
   const handleSwitchToSignup = () => setActiveView("signup");
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-30 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4">
       <div 
         className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6 mx-auto"
         onClick={(e) => e.stopPropagation()}
