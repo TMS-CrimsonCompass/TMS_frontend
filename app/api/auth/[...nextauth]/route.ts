@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 
 // This would connect to your actual backend API
 const backendUrl = process.env.BACKEND_URL || "http://localhost:8080/api";
@@ -51,6 +53,22 @@ const handler = NextAuth({
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      // authorization: {
+      //   params: {
+      //     scope: "openid profile email"
+      //   }
+      // }
+    }),
+
+    //  Facebook OAuth Provider
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string
+      ,
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -59,6 +77,32 @@ const handler = NextAuth({
         token.id = user.id;
         token.accessToken = user.accessToken; // Add accessToken here
       }
+
+      if (user?.accessToken) {
+        try {
+          const response = await fetch(`${backendUrl}/api/oauth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+            body: JSON.stringify({
+              accessToken: user.accessToken,
+              email: user.email, 
+            }),
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            console.log("User data from backend:", data);
+          } else {
+            console.error("Error from backend:", data);
+          }
+        } catch (error) {
+          console.error("Error calling backend API:", error);
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {

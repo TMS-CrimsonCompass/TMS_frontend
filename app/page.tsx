@@ -15,10 +15,12 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Button from './components/ui/Button';
 import Card from './components/ui/Card';
+import { useSession, signOut } from "next-auth/react";
 
 
 
 export default function HomePage() {
+  const { data: session, status } = useSession(); // 'loading', 'authenticated', 'unauthenticated'
   const [search, setSearch] = useState("");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -42,7 +44,7 @@ export default function HomePage() {
           <Link href="/car-rentals" className="text-gray-700 hover:text-blue-600">Itinerary </Link>
         </div>
         <div className="space-x-4">
-          <button
+          {/* <button
             onClick={() => setIsLoginOpen(true)}
             className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
           >
@@ -53,7 +55,33 @@ export default function HomePage() {
             className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
           >
             Sign Up
-          </button>
+          </button> */}
+          {session ? (
+            <>
+            <span className="text-gray-700 font-semibold">Welcome, {session.user?.name}</span>
+            <button
+        onClick={() => signOut()}
+        className="mt-4 bg-white text-red-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
+      >
+        Sign Out
+      </button>
+    </>
+  ) : (
+    <>
+      <button
+        onClick={() => setIsLoginOpen(true)}
+        className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
+      >
+        Login
+      </button>
+      <button
+        onClick={() => setIsSignupOpen(true)}
+        className="mt-4 bg-white text-blue-500 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition"
+      >
+        Sign Up
+      </button>
+    </>
+  )}
           {/* Login Modal */}
           <Modal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)}>
             <Login onSignupClick={() => {

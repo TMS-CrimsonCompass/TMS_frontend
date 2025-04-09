@@ -112,6 +112,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
             </span>
           </p>
         </form>
+
+        {/* --- OAuth Section --- */}
+      <div className="mt-6">
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="mx-2 text-gray-500 text-sm">or</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <div className="space-y-2">
+          <button
+            onClick={() => signIn("google")}
+            className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-md"
+          >
+            <span>G</span> Sign in with Google
+          </button>
+          <button
+            onClick={() => signIn("facebook")}
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 px-4 rounded-md"
+          >
+            <span>f</span> Sign in with Facebook
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   );
