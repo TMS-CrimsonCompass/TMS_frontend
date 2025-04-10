@@ -2,6 +2,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Please install this package for search bar
+"npm install lodash.debounce"
+
 First, run the development server:
 
 ```bash

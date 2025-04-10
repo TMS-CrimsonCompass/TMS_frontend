@@ -22,7 +22,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
 
     try {
       const result = await signIn("credentials", {
-        redirect: false,
+        redirect: true,
         email,
         password,
       });
