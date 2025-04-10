@@ -94,7 +94,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
       </div>
       <div className="w-full md:w-1/2 p-4">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-xl font-semibold">Sign Up</h2>
+          <h2 className="text-xl font-semibold text-black">Sign Up</h2>
 
           {error && (
             <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -112,7 +112,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
             />
           </div>
 
@@ -126,7 +126,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
             />
           </div>
 
@@ -140,7 +140,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
             />
           </div>
 
@@ -154,7 +154,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
             />
           </div>
 
@@ -168,16 +168,16 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-green-600 text-white font-medium py-2 px-4 rounded hover:bg-green-700 disabled:bg-green-400"
+            className="w-full bg-green-600 text-white font-medium py-2 px-4 rounded hover:bg-green-700 disabled:bg-green-400 text-black"
           >
-            {isLoading ? "Processing..." : "Continue"}
+            {isLoading ? "Registering..." : "Continue"}
           </button>
 
           {onLoginClick && (

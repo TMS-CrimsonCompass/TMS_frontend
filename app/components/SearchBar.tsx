@@ -71,7 +71,7 @@ export default function SearchBar() {
              />
              <div>
                <p className="font-semibold text-black">{place.name}</p>
-               <p className="text-sm text-gray-700">{place.category}</p>
+               <p className="text-sm text-gray-700">{place.city}</p>
              </div>
            </li>
          ))}
