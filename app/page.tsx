@@ -11,7 +11,12 @@ import paris from '../public/images/paris.jpg';
 import switzerland from '../public/images/switzerland.jpg';
 import dubai from '../public/images/dubai.jpg';
 import india from '../public/images/india.jpg';
-
+import background from '../public/images/background.jpg'
+import Modal from "./components/Modal";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import Button from './components/ui/Button';
+import Card from './components/ui/Card';
 import AuthModal from './components/auth/AuthModal';
 import SearchBar from "./components/SearchBar"; // adjust path if necessaryimport { useSession, signOut } from "next-auth/react";
 
@@ -21,7 +26,6 @@ export default function HomePage() {
   const { data: session, status } = useSession(); // 'loading', 'authenticated', 'unauthenticated'
   const [search, setSearch] = useState("");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const { data: session } = useSession();
 
   const handleSearch = () => {
     if (search.trim() !== "") {
