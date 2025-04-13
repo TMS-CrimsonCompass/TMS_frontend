@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useAuth } from "@/contexts/AuthContext";
+import { ClientConfig } from "@/app.config";
 
 interface SignupFormProps {
   onLoginClick?: () => void;
@@ -20,38 +21,41 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (password !== confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
-  
+
     if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-      setError("Password must be at least 8 characters long and include letters and numbers.");
+      setError(
+        "Password must be at least 8 characters long and include letters and numbers."
+      );
       return;
     }
-  
+
     setError("");
     setIsLoading(true);
-  
+
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api";
-  
-      const response = await fetch(`${backendUrl}/users/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      });
-  
+      const response = await fetch(
+        `${ClientConfig.backendUrl}/api/users/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+          }),
+        }
+      );
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         const errorMessage = data.message || "Registration failed";
         if (data.code === "EMAIL_ALREADY_EXISTS") {
@@ -59,18 +63,20 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
         }
         throw new Error(errorMessage);
       }
-  
+
       const result = await signIn("credentials", {
         redirect: true,
         email,
         password,
       });
-      
+
       setIsLoading(false);
       onLoginClick?.(); // Switch to login view
 
       if (result?.error) {
-        setError("Registration successful, but auto-login failed. Please log in manually.");
+        setError(
+          "Registration successful, but auto-login failed. Please log in manually."
+        );
         if (onLoginClick) onLoginClick();
       } else {
         closeAuthModal();
@@ -81,7 +87,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -103,7 +109,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           )}
 
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-gray-700"
+            >
               First Name
             </label>
             <input
@@ -117,7 +126,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-700"
+            >
               Last Name
             </label>
             <input
@@ -131,7 +143,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -145,7 +160,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -159,7 +177,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
               Re-type Password
             </label>
             <input

@@ -1,8 +1,7 @@
+
+import { ServerConfig } from "@/app.config";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-// This would connect to your actual backend API
-const backendUrl = process.env.BACKEND_URL || "http://localhost:8080/api";
 
 const handler = NextAuth({
   providers: [
@@ -18,7 +17,7 @@ const handler = NextAuth({
         }
       
         try {
-          const response = await fetch(`${backendUrl}/users/login`, {
+          const response = await fetch(`${ServerConfig.backendUrl}/api/users/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

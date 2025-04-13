@@ -37,7 +37,7 @@ export default function HomePage() {
           <Link href="/flights" className="text-gray-700 hover:text-blue-600">Flights</Link>
           <Link href="/accommodations" className="text-gray-700 hover:text-blue-600">Accommodations</Link>
           <Link href="/bookings" className="text-gray-700 hover:text-blue-600">Bookings</Link>
-          <Link href="/car-rentals" className="text-gray-700 hover:text-blue-600">Itinerary</Link>
+          <Link href="/itinerary" className="text-gray-700 hover:text-blue-600">Itinerary</Link>
         </div>
         <div className="space-x-4">
           {session ? (

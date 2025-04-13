@@ -50,7 +50,7 @@ export const api = {
       email: string; 
       password: string;
     }) => 
-      fetchWithAuth("/users/register", {
+      fetchWithAuth("/api/users/register", {
         method: "POST",
         body: JSON.stringify(userData),
       }),

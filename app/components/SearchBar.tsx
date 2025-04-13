@@ -1,47 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import debounce from "lodash.debounce";
+import { useState } from "react";
+import { SearchResultDTO } from "../types/dto";
+import useSearchHotelAndPlaces from "../hooks/useSearchHotelAndPlaces";
 
-export default function SearchBar() {
+export default function SearchBar({ text }: { text?: "DEFAULT" | "WHITE" }) {
   const [query, setQuery] = useState("");
-  const [places, setPlaces] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { searchResults } = useSearchHotelAndPlaces(query, setShowDropdown);
 
-  // Debounced API call
-  const fetchSuggestions = debounce(async (search: string) => {
-    if (!search || search.length < 3) {
-      setPlaces([]);
-      setShowDropdown(false);
-      return;
-    }
-
-    try {
-      const res = await fetch(`http://localhost:8080/api/places/search?q=${search}`);
-      const data = await res.json();
-      setPlaces(data);
-      setShowDropdown(true);
-    } catch (error) {
-      console.error("Autocomplete error:", error);
-      setPlaces([]);
-      setShowDropdown(false);
-    }
-  }, 150);
-
-  useEffect(() => {
-    fetchSuggestions(query);
-    return () => fetchSuggestions.cancel();
-  }, [query]);
-
-  const handleSelect = (placeName: string) => {
-    window.location.href = `/explore?query=${encodeURIComponent(placeName)}`;
+  const handleSelect = (search?: SearchResultDTO) => {
+    if (!search) return;
+    window.location.href = `/explore/${search.type}?query=${encodeURIComponent(
+      search.id
+    )}`;
     setShowDropdown(false);
-  };
-
-  const handleSearch = () => {
-    if (query.trim().length >= 3) {
-      window.location.href = `/explore?query=${encodeURIComponent(query)}`;
-    }
   };
 
   return (
@@ -52,37 +25,37 @@ export default function SearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 3 && setShowDropdown(true)}
-          placeholder="Search for destinations, hotels, flights..."
-          className="w-full border border-gray-300 outline-none px-4 py-3 text-gray-700 text-lg rounded-md"
+          placeholder="Search for destinations and hotels"
+          className={`w-full border border-gray-300 outline-none px-4 py-3 ${
+            text === "WHITE" ? "text-white" : "text-gray-700"
+          } text-lg rounded-md`}
         />
 
-        {showDropdown && places.length > 0 && (
-         <ul className="absolute z-50 bg-white border w-full rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1">
-         {places.map((place: any) => (
-           <li
-             key={place.placeId}
-             onClick={() => handleSelect(place.name)}
-             className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
-           >
-             <img
-               src={place.images[0]?.imageUrl}
-               alt={place.name}
-               className="w-10 h-10 object-cover rounded mr-3"
-             />
-             <div>
-               <p className="font-semibold text-black">{place.name}</p>
-               <p className="text-sm text-gray-700">{place.category}</p>
-             </div>
-           </li>
-         ))}
-       </ul>
-       
+        {showDropdown && searchResults.length > 0 && (
+          <ul className="absolute z-50 bg-white border w-full rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1">
+            {searchResults.map((search) => (
+              <li
+                key={search.id}
+                onClick={() => handleSelect(search)}
+                className="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
+              >
+                <img
+                  src={search.image}
+                  alt={search.name}
+                  className="w-10 h-10 object-cover rounded mr-3"
+                />
+                <div>
+                  <p className="font-semibold text-black">{search.name}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 
       {/* 🔵 Search Button */}
       <button
-        onClick={handleSearch}
+        onClick={() => handleSelect(searchResults[0])}
         className="bg-blue-600 text-white px-5 py-3 rounded-md text-lg hover:bg-blue-700 transition"
       >
         Search
