@@ -14,6 +14,7 @@ import india from '../public/images/india.jpg';
 
 import AuthModal from './components/auth/AuthModal';
 import SearchBar from "./components/SearchBar"; // adjust path if necessary
+import NavBar from "./components/NavBar";
 
 
 export default function HomePage() {
@@ -31,7 +32,8 @@ export default function HomePage() {
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
 
       {/* 🔹 Navbar */}
-      <nav className="w-full flex justify-between items-center px-8 py-4 bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+      <NavBar />
+      {/* <nav className="w-full flex justify-between items-center px-8 py-4 bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <Link href="/" className="text-2xl font-bold text-blue-600">Tour Management</Link>
         <div className="hidden md:flex space-x-6">
           <Link href="/flights" className="text-gray-700 hover:text-blue-600">Flights</Link>
@@ -59,10 +61,10 @@ export default function HomePage() {
             </button>
           )}
         </div>
-      </nav>
+      </nav> */}
 
       {/* 🔹 Auth Modal */}
-      <AuthModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} initialView="login" />
+      {/* <AuthModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} initialView="login" /> */}
 
       {/* 🔹 Hero Section */}
 <section className="relative w-full h-[500px] flex flex-col items-center justify-center text-white text-center">

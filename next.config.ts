@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
         source: "/api/search/:path*",
         destination: withBaseURL("/api/search/:path*"),
       },
+
+      {
+        source: "/api/flights/:path*",
+        destination: withBaseURL("/api/flights/:path*"),
+      },
     ];
   },
 };
