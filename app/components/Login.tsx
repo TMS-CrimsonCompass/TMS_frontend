@@ -41,6 +41,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
     }
   };
 
+  const handleOAuthLogin = () => {
+    // Replace the URL with your actual OAuth endpoint
+    window.location.href = "http://localhost:8081/oauth2/authorization/google"; //TO-DO
+  };
+
   return (
     <div className="flex flex-col md:flex-row">
       <div className="hidden md:block w-full md:w-1/2">
@@ -123,16 +128,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
 
         <div className="space-y-2">
           <button
-            onClick={() => signIn("google")}
+            onClick={handleOAuthLogin}
             className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-md"
           >
             <span>G</span> Sign in with Google
-          </button>
-          <button
-            onClick={() => signIn("facebook")}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-2 px-4 rounded-md"
-          >
-            <span>f</span> Sign in with Facebook
           </button>
         </div>
       </div>

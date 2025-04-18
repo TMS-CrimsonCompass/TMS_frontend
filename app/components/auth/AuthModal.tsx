@@ -45,21 +45,6 @@ const AuthModal: React.FC<AuthModalProps> = ({
           ) : (
             <SignupForm onLoginClick={handleSwitchToLogin} />
           )}
-           {/* OAuth Buttons */}
-           <div className="mt-4">
-            <button
-              onClick={() => signIn("google")}
-              className="w-full bg-red-500 text-white py-2 px-4 rounded-md mb-2"
-            >
-              Sign in with Google
-            </button>
-            <button
-              onClick={() => signIn("facebook")}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md"
-            >
-              Sign in with Facebook
-            </button>
-            </div>
         </div>
       </div>
     </div>
