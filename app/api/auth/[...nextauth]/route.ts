@@ -1,10 +1,10 @@
+// pages/api/auth/[...nextauth].js
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import OAuthProvider from "next-auth/providers/oauth"
-import GoogleProvider from "next-auth/providers/google";
+import OAuthProvider from "next-auth/providers/oauth";
 
-// This would connect to your actual backend API
 const backendUrl = process.env.BACKEND_URL || "http://localhost:8080/api";
+const authServiceUrl = process.env.AUTH_SERVICE_URL || "http://localhost:8081/api";
 
 const handler = NextAuth({
   providers: [
@@ -12,127 +12,132 @@ const handler = NextAuth({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
+        token: { label: "Token", type: "text" }, // Add token field
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password required");
-        }
-      
-        try {
-          const response = await fetch(`${backendUrl}/users/login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials.email,
-              password: credentials.password,
-            }),
-          });
-      
-          const data = await response.json();
-      
-          if (!response.ok) {
-            throw new Error(data.message || "Authentication failed");
+        // Handle regular email/password login
+        if (credentials?.email && credentials?.password) {
+          try {
+            const response = await fetch(`${backendUrl}/users/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+              }),
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+              throw new Error(data.message || "Authentication failed");
+            }
+            
+            return {
+              id: data.data.userId.toString(),
+              email: data.data.email,
+              name: `${data.data.firstName} ${data.data.lastName}`,
+              role: data.data.role,
+              profilePicture: data.data.profilePicture,
+              phoneNumber: data.data.phoneNumber,
+              accessToken: data.accessToken,
+            };
+          } catch (error) {
+            console.error("Auth error:", error);
+            throw new Error("Authentication failed");
           }
-      
-          // Return user object with accessToken
-          return {
-            id: data.data.userId.toString(),
-            email: data.data.email,
-            name: `${data.data.firstName} ${data.data.lastName}`,
-            role: data.data.role,
-            profilePicture: data.data.profilePicture,
-            phoneNumber: data.data.phoneNumber,
-            accessToken: data.accessToken,
-          };
-        } catch (error) {
-          console.error("Auth error:", error);
-          throw new Error("Authentication failed");
         }
+        
+        // Handle JWT token from OAuth service
+        if (credentials?.token) {
+          try {
+            // Verify the token with your backend
+            const response = await fetch(`${backendUrl}/auth/validate-token`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${credentials.token}`  // Send token in header
+              },
+              // Remove body since we're using Authorization header
+            });
+
+            // Check for empty response first
+            const text = await response.text();
+            if (!text) {
+              throw new Error("Empty response from server");
+            }
+
+            const data = JSON.parse(text); // Manual parsing for better error handling
+
+            if (!response.ok) {
+              throw new Error(data.message || `Token verification failed (HTTP ${response.status})`);
+            }
+            
+            return {
+              id: data.userId,
+              email: data.email,
+              name: data.name,
+              role: data.role,
+              profilePicture: data.profilePicture,
+              accessToken: credentials.token,
+            };
+          } catch (error) {
+            console.error("Token verification error:", error);
+            throw new Error("Token verification failed");
+          }
+        }
+        
+        return null;
       },
     }),
-    // OAuth provider that uses your Auth service endpoints
-    OAuthProvider({
-      id: "auth", // a unique identifier for this provider
-      name: "Google via Auth",
-      clientId: process.env.AUTH_CLIENT_ID, // Provided by your Auth service registration
-      clientSecret: process.env.AUTH_CLIENT_SECRET,
-      // Redirect users to your Auth service's OAuth endpoint. In this setup, your local Auth service runs on port 8081.
-      authorization: {
-        url: "http://localhost:8081/oauth2/authorization/google",
-        params: { scope: "openid email profile" }
-      },
-      // Use your Auth service token endpoint to retrieve access token
-      token: { url: "http://localhost:8081/oauth2/token" },
-      // Endpoint to fetch the authenticated user's profile details.
-      userinfo: { url: "http://localhost:8081/userinfo" },
-      // Add this callback URL configuration
-      callbackUrl: "http://localhost:3000/api/auth/callback/auth",
-      // Map the profile response from your Auth service into NextAuth's user format.
-      profile(profile: { authId: any; sub: any; name: any; email: any; }) {
-        return {
-          id: profile.authId || profile.sub, // use authId if provided by auth service, fallback to sub
-          name: profile.name,
-          email: profile.email
-        };
-      },
-    })
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID as string,
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    //   // authorization: {
-    //   //   params: {
-    //   //     scope: "openid profile email"
-    //   //   }
-    //   // }
-    // }),
+    // OAuthProvider({
+    //   id: "auth",
+    //   name: "Google via Auth",
+    //   clientId: process.env.AUTH_CLIENT_ID,
+    //   clientSecret: process.env.AUTH_CLIENT_SECRET,
+    //   authorization: {
+    //     url: `${authServiceUrl}/oauth2/authorization/google`,
+    //     params: { scope: "openid email profile" }
+    //   },
+    //   token: { url: `${authServiceUrl}/oauth2/token` },
+    //   userinfo: { url: `${authServiceUrl}/userinfo` },
+    //   callbackUrl: "http://localhost:3000/api/auth/callback/auth",
+    //   profile(profile) {
+    //     return {
+    //       id: profile.authId || profile.sub,
+    //       name: profile.name,
+    //       email: profile.email
+    //     };
+    //   },
+    // })
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      // Add accessToken to token after initial sign-in
+    async jwt({ token, user, account }) {
+      // Add user details to token after initial sign-in
       if (user) {
         token.id = user.id;
-        token.accessToken = user.accessToken; // Add accessToken here
+        token.accessToken = user.accessToken;
+        token.email = user.email;
+        token.name = user.name;
       }
-
-      // if (user?.accessToken) {
-      //   try {
-      //     const response = await fetch(`${backendUrl}/api/oauth/login`, {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Authorization: `Bearer ${user.accessToken}`,
-      //       },
-      //       body: JSON.stringify({
-      //         accessToken: user.accessToken,
-      //         email: user.email, 
-      //       }),
-      //     });
-
-      //     const data = await response.json();
-      //     if (response.ok) {
-      //       console.log("User data from backend:", data);
-      //     } else {
-      //       console.error("Error from backend:", data);
-      //     }
-      //   } catch (error) {
-      //     console.error("Error calling backend API:", error);
-      //   }
-      // }
-
       return token;
     },
     async session({ session, token }) {
-      // Include accessToken in session
+      // Add user details to session
       if (token) {
         session.user.id = token.id;
-        session.user.accessToken = token.accessToken; // Add accessToken here
+        session.user.accessToken = token.accessToken;
+        session.user.email = token.email;
+        session.user.name = token.name;
       }
       return session;
     },
-  },  
+  },
+  // pages: {
+  //   signIn: '/login',
+  //   error: '/auth/error',
+  // },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
