@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
-export default function TokenInterceptor() {
+function TokenInterceptorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -12,20 +12,27 @@ export default function TokenInterceptor() {
     const token = searchParams.get('token');
     
     if (token) {
-      // Sign in with the token
       signIn('credentials', {
         token,
         redirect: false,
       }).then((result) => {
         if (result?.ok) {
-          // Remove the token from URL by redirecting to the same page without query params
           router.replace('/');
         } else {
-          console.error('Failed to authenticate with token', result?.error);
+          console.error('Authentication failed:', result?.error);
         }
       });
     }
   }, [searchParams, router]);
-  
-  return null; // This component doesn't render anything
+
+  return null;
+}
+
+// Wrapper component with Suspense boundary
+export default function TokenInterceptor() {
+  return (
+    <Suspense fallback={<div>Loading authentication...</div>}>
+      <TokenInterceptorContent />
+    </Suspense>
+  );
 }
