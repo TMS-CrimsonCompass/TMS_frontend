@@ -3,8 +3,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import OAuthProvider from "next-auth/providers/oauth";
 
-const backendUrl = process.env.BACKEND_URL || "http://localhost:8080/api";
-const authServiceUrl = process.env.AUTH_SERVICE_URL || "http://localhost:8081/api";
+const backendUrl = process.env.BACKEND_URL || "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api";
+const authServiceUrl = process.env.AUTH_SERVICE_URL || "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api";
 
 const handler = NextAuth({
   providers: [

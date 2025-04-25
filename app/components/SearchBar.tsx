@@ -17,7 +17,7 @@ export default function SearchBar() {
     }
 
     try {
-      const res = await fetch(`http://localhost:8080/api/places/search?q=${search}`);
+      const res = await fetch(`https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api/places/search?q=${search}`);
       const data = await res.json();
       setPlaces(data);
       setShowDropdown(true);
