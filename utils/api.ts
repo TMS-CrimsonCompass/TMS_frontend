@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/react";
 
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api";
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api";
 
 async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const session = await getSession();
