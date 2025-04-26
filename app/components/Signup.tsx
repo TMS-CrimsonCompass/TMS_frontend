@@ -35,7 +35,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onLoginClick }) => {
     setIsLoading(true);
   
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net";
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api";
   
       const response = await fetch(`${backendUrl}/users/register`, {
         method: "POST",
