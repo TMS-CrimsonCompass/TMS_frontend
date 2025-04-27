@@ -1,8 +1,8 @@
 // This would connect to your actual backend API
 export const ServerConfig = {
-    backendUrl : process.env.BACKEND_URL || "http://localhost:8080/api"
+    backendUrl :  "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net"
 }
 
 export const ClientConfig = {
-    backendUrl : process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080/api"
+    backendUrl :  "https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net"
 }

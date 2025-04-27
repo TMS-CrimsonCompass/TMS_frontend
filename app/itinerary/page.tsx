@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import NavBar from "../components/NavBar";
 import ItineraryCard from "./ItineraryCard";
 import IndividualItineraryPage from "./IndividualItineraryPage";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { FaPlus } from "react-icons/fa";
 import NewItineraryModal from "./NewItineraryModal";
 import { getSession } from "next-auth/react";
@@ -98,9 +98,22 @@ const SelectedItineraryPage = ({ id }: { id: string }) => {
   );
 };
 
-export default function ItineraryPage() {
+// Component that uses useSearchParams
+function ItineraryContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  
   if (query) return <SelectedItineraryPage id={query} />;
   return <ItinerarySelectionPage />;
+}
+
+// Main exported component with Suspense boundary
+export default function ItineraryPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="text-xl">Loading itineraries...</div>
+    </div>}>
+      <ItineraryContent />
+    </Suspense>
+  );
 }
