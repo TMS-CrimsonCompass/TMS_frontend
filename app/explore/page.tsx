@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaSearch, FaMapMarkerAlt, FaStar, FaCar, FaSwimmer, FaUtensils, FaWifi, FaPaw, FaBath, FaDumbbell, FaWheelchair, FaSpa, FaGlassCheers, FaConciergeBell, FaTv, FaCoffee, FaSnowflake } from 'react-icons/fa';
 import Button from '../components/ui/Button';
@@ -21,6 +22,7 @@ import pool2 from '../../public/images/pool2.jpg';
 import hotelLobby from '../../public/images/hotelLobby.jpg';
 import food1 from '../../public/images/food1.jpg';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import NavBar from "@/app/components/NavBar";
 
 const hotelLocation = {
   lat: 36.0986,
@@ -172,11 +174,21 @@ const areaInfo = {
 export default function Page() {
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const router = useRouter();
+  
   const handleScrollToSection = (sectionId) => {
     document.getElementById(sectionId).scrollIntoView({
       behavior: 'smooth',
     });
+  };
+
+  const [userRating, setUserRating] = useState(0); // ✅ inside component
+  const [ratings, setRatings] = useState<number[]>([4, 5, 3, 4]); // ✅ inside component
+
+  const averageRating = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1);
+  const handleRating = (rating: number) => {
+    setUserRating(rating);
+    setRatings(prev => [...prev, rating]);
   };
 
   const handleImageClick = (image) => {
@@ -188,27 +200,10 @@ export default function Page() {
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-purple-50 min-h-screen">
-      {/* Navbar */}
-      <nav className="bg-gradient-to-r from-blue-900 to-purple-900 p-4 flex justify-between items-center text-white fixed top-0 left-0 w-full shadow-md z-50">
-        <h1 className="text-xl font-bold">Crimson Compass</h1>
-        <div className="flex bg-white text-black p-2 rounded-lg w-1/2">
-          <input
-            type="text"
-            placeholder="Las Vegas"
-            className="flex-grow p-1 outline-none"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button className="px-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all">
-            <FaSearch />
-          </button>
-        </div>
-        <div>
-          <button className="mr-4 hover:text-blue-300 transition-colors">Register</button>
-          <button className="hover:text-purple-300 transition-colors">Sign In</button>
-        </div>
-      </nav>
+    <>
+      <NavBar /> {/* ✅ This makes your page consistent with the home page */}
+      <div className='min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-8'>
+        <div className='max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-xl space-y-10'></div>
 
       {/* Hero Section */}
       <div className="relative w-full h-80 mt-16">
@@ -290,10 +285,29 @@ export default function Page() {
               </p>
               <p className="text-sm text-gray-500">28,792 reviews</p>
             </div>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg shadow-md hover:from-blue-700 hover:to-purple-700 transition-all">
+            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg shadow-md hover:from-blue-700 hover:to-purple-700 transition-all"
+              onClick={() => router.push('/bookings')}>
               Reserve
             </Button>
           </div>
+
+          {/* ⭐ User Rating Section */}
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold text-yellow-600">Rate this Hotel:</h3>
+            <div className="flex items-center space-x-1 mt-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <FaStar
+                  key={star}
+                  className={`cursor-pointer text-2xl transition-transform ${
+                    userRating >= star ? 'text-yellow-500' : 'text-gray-300'
+                  }`}
+                  onClick={() => handleRating(star)}
+                />
+              ))}
+            </div>
+            <p className="text-sm text-gray-600 mt-1">Your Rating: {userRating > 0 ? `${userRating}/5` : 'Not rated yet'}</p>
+          </div>
+
 
           {/* Amenities Section */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-gray-700">
@@ -335,7 +349,9 @@ export default function Page() {
 
           {/* Reviews Section */}
           <div id="reviews" className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-blue-50 border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition">
-            <h3 className="text-xl font-semibold text-purple-800">Guest Reviews</h3>
+            <h3 className="text-xl font-semibold text-purple-800">
+              Guest Reviews <span className="ml-2 text-yellow-500">⭐ {averageRating}</span>
+            </h3>
             <div className="mt-2">
               <p className="text-gray-800 font-semibold">John D. ⭐⭐⭐⭐</p>
               <p className="text-gray-600">"Great location, decent rooms, but the check-in took a while."</p>
@@ -356,9 +372,12 @@ export default function Page() {
                   <h4 className="text-md font-semibold mt-2">{activity.name}</h4>
                   <p className="text-sm text-gray-600">⭐ {activity.rating} ({activity.reviews})</p>
                   <p className="text-lg font-bold text-blue-600 mt-2">{activity.price}</p>
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white w-full mt-2 py-1 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all">
+                  <Button
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white w-full mt-2 py-1 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+                    onClick={() => router.push('/booking')}>
                     Book Now
                   </Button>
+
                 </div>
               ))}
             </div>
@@ -494,5 +513,7 @@ export default function Page() {
 </div>
 
     </div>
+    
+    </>
   );
 }
