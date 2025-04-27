@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation"; 
 
 interface LoginFormProps {
   onSignupClick: () => void;
@@ -14,6 +15,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { closeAuthModal } = useAuth();
+  const router = useRouter(); //
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,6 +118,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               Sign Up
             </span>
           </p>
+
+          {/* Forgot Password Link */}
+          <div className="text-right">
+            <p
+              className="mt-1 text-sm text-blue-500 font-semibold cursor-pointer hover:underline"
+              onClick={() => router.push("/forgot-password")}
+            >
+              Forgot Password?
+            </p>
+          </div>
         </form>
 
         {/* --- OAuth Section --- */}
