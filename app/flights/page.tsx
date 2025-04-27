@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import NavBar from "@/app/components/NavBar";
+import { useRouter } from "next/navigation";
 
 type Flight = {
   airline: string;
@@ -18,6 +19,7 @@ type Flight = {
 };
 
 export default function FlightsPage() {
+  const router = useRouter();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
@@ -182,6 +184,17 @@ export default function FlightsPage() {
                 <strong>Seats Available:</strong> {flight.availableSeats}
               </p>
               <p className="mt-2 font-bold text-green-600 text-lg">${flight.price}</p>
+
+              {/* ✅ Add the Book Now button here */}
+              <button
+                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={() => {
+                  localStorage.setItem("selectedFlight", JSON.stringify(flight));
+                  router.push("/booking");
+                }}
+              >
+                Book Now
+              </button>
             </div>
           ))}
         </div>

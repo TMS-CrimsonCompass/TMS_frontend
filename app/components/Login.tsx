@@ -52,7 +52,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
       </div>
       <div className="w-full md:w-1/2 p-4">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-xl font-semibold">Login</h2>
+          <h2 className="text-xl text-black font-semibold">Login</h2>
           
           {error && (
             <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -63,7 +63,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm text-black font-medium text-balck-700"
             >
               Email
             </label>
@@ -73,14 +73,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
           
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-black"
             >
               Password
             </label>
@@ -90,7 +90,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border-grey-300 text-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             />
           </div>
           
