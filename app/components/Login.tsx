@@ -45,7 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
 
   const handleOAuthLogin = () => {
     // Replace the URL with your actual OAuth endpoint
-    window.location.href = "http://localhost:8081/oauth2/authorization/google"; //TO-DO
+    window.location.href = "https://ccoauth-a0egb9h9fzdvfkgs.centralus-01.azurewebsites.net/oauth2/authorization/google"; //TO-DO
   };
 
   return (
