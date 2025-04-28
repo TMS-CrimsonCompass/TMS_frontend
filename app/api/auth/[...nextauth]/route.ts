@@ -90,27 +90,7 @@ const handler = NextAuth({
         
         return null;
       },
-    }),
-    // OAuthProvider({
-    //   id: "auth",
-    //   name: "Google via Auth",
-    //   clientId: process.env.AUTH_CLIENT_ID,
-    //   clientSecret: process.env.AUTH_CLIENT_SECRET,
-    //   authorization: {
-    //     url: `${authServiceUrl}/oauth2/authorization/google`,
-    //     params: { scope: "openid email profile" }
-    //   },
-    //   token: { url: `${authServiceUrl}/oauth2/token` },
-    //   userinfo: { url: `${authServiceUrl}/userinfo` },
-    //   callbackUrl: "http://localhost:3000/api/auth/callback/auth",
-    //   profile(profile) {
-    //     return {
-    //       id: profile.authId || profile.sub,
-    //       name: profile.name,
-    //       email: profile.email
-    //     };
-    //   },
-    // })
+    })
   ],
   callbacks: {
     async jwt({ token, user, account }) {
