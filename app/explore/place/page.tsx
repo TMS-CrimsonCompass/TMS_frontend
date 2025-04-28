@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
   FaSearch,
   FaMapMarkerAlt,
@@ -169,7 +169,7 @@ const areaInfo = {
   ],
 };
 
-export default function Page() {
+function PlacePageContent() {
 
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [hotel, setHotel] = useState<any>(null);
@@ -551,3 +551,16 @@ export default function Page() {
     return <div>Loading...</div>;
   }
 }
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="text-xl text-gray-600">Loading place information...</div>
+      </div>
+    }>
+      <PlacePageContent />
+    </Suspense>
+  );
+}
+

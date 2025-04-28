@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation"; 
 
 interface LoginFormProps {
   onSignupClick: () => void;
@@ -14,6 +15,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { closeAuthModal } = useAuth();
+  const router = useRouter(); //
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +41,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleOAuthLogin = () => {
+    // Replace the URL with your actual OAuth endpoint
+    window.location.href = "http://localhost:8081/oauth2/authorization/google"; //TO-DO
   };
 
   return (
@@ -111,7 +118,35 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSignupClick }) => {
               Sign Up
             </span>
           </p>
+
+          {/* Forgot Password Link */}
+          <div className="text-right">
+            <p
+              className="mt-1 text-sm text-blue-500 font-semibold cursor-pointer hover:underline"
+              onClick={() => router.push("/forgot-password")}
+            >
+              Forgot Password?
+            </p>
+          </div>
         </form>
+
+        {/* --- OAuth Section --- */}
+      <div className="mt-6">
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="mx-2 text-gray-500 text-sm">or</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        <div className="space-y-2">
+          <button
+            onClick={handleOAuthLogin}
+            className="w-full flex items-center justify-center gap-2 bg-red-500 text-white py-2 px-4 rounded-md"
+          >
+            <span>G</span> Sign in with Google
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   );

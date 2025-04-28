@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import LoginForm from "../Login";
 import SignupForm from "../Signup";
+
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
   const handleSwitchToLogin = () => setActiveView("login");
   const handleSwitchToSignup = () => setActiveView("signup");
 
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4">
       <div 
@@ -40,7 +43,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
 
         <div className="mt-2">
           {activeView === "login" ? (
-            <LoginForm onSignupClick={handleSwitchToSignup} />
+            <LoginForm onSignupClick={handleSwitchToSignup}
+             />
           ) : (
             <SignupForm onLoginClick={handleSwitchToLogin} />
           )}
