@@ -50,7 +50,7 @@ export default function BookingPage() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/bookings", {
+      const response = await fetch("https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

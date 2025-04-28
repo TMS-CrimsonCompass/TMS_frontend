@@ -9,7 +9,7 @@ export default function ForgotPasswordPage() {
 
   const handleRequestReset = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/request-reset", { email });
+      await axios.post("https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api/auth/request-reset", { email });
       setMessage("Reset link sent to your email.");
     } catch (err) {
       setMessage("Error sending reset link. Try again.");
