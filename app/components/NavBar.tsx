@@ -40,7 +40,7 @@ export default function NavBar() {
         <div className="space-x-4">
           {session ? (
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700 font-medium">{session.user?.name || session.user?.email}</span>
+              <span className="text-white-700 font-medium">{session.user?.name || session.user?.email}</span>
               <button
                 onClick={() => signOut()}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
