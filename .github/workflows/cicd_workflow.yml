@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm ci
+
+      # - name: Run Test Cases
+      #   run: npm run test
+
+      - name: Build Next.js Application
+        run: npm run build
+
+      - name: Set repository owner in lowercase
+        run: echo "REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Build and push the image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker build -t ghcr.io/${{ env.REPO_OWNER }}/ccfrontend:latest -f Dockerfile .
+          docker push ghcr.io/${{ env.REPO_OWNER }}/ccfrontend:latest
