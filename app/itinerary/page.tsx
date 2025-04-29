@@ -1,12 +1,12 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import NavBar from "../components/NavBar";
 import ItineraryCard from "./ItineraryCard";
 import IndividualItineraryPage from "./IndividualItineraryPage";
 import { useEffect, useState, Suspense } from "react";
 import { FaPlus } from "react-icons/fa";
 import NewItineraryModal from "./NewItineraryModal";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 interface MasterItinerary {
   masterItineraryId: number;
@@ -102,6 +102,8 @@ const SelectedItineraryPage = ({ id }: { id: string }) => {
 function ItineraryContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const { data: session } = useSession();
+  const router = useRouter();
   
   if (query) return <SelectedItineraryPage id={query} />;
   return <ItinerarySelectionPage />;

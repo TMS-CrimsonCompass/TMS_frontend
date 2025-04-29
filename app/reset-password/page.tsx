@@ -16,7 +16,7 @@ function ResetPasswordForm() {
 
   const handleReset = async () => {
     try {
-      await axios.post("http://localhost:8080/api/auth/reset-password", {
+      await axios.post("https://ccmain-hzcbg5c8hzh4dwfc.centralus-01.azurewebsites.net/api/auth/reset-password", {
         token,
         newPassword: password,
       });
