@@ -104,13 +104,6 @@ function ItineraryContent() {
   const query = searchParams.get("query");
   const { data: session } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!session) {
-      alert("Please login first."); // Native popup
-      router.push("/"); //  Redirect immediately
-    }
-  }, [session]);
   
   if (query) return <SelectedItineraryPage id={query} />;
   return <ItinerarySelectionPage />;
